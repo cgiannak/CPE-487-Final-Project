@@ -1,3 +1,14 @@
+--Change all mine variables to mine_number variables
+--Repeat processes for each iteration of mine_numbers
+--Move the location of the paddle (boat)
+--Create new sprite for surface of water
+--Change background color
+--Make paddle shoot depth charges when button is pressed
+--Signal to delete both depth charge and submarine when they collide
+--Counter to keep score of how many submarines you hit
+--Manual reset button
+
+
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
