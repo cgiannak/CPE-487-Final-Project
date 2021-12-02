@@ -46,18 +46,18 @@ BEGIN
 	
     -- process to draw round ball
     -- set ball_on if current pixel address is covered by ball position
-    ball_1_draw : PROCESS (ball_1_x, ball_1_y, pixel_1_row, pixel_1_col) IS
+    ball_1_draw : PROCESS (ball_1_x, ball_1_y, pixel_row, pixel_col) IS
         VARIABLE vx_1, vy_1 : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
     BEGIN
-        IF pixel_col_1 <= ball_1_x THEN -- vx_1 = |ball_1_x - pixel_1_col|
-            vx_1 := ball_x - pixel_col;
+        IF pixel_col <= ball_1_x THEN -- vx_1 = |ball_1_x - pixel_col|
+            vx_1 := ball_1_x - pixel_col;
         ELSE
-            vx_1 := pixel_col_1 - ball_1_x;
+            vx_1 := pixel_col - ball_1_x;
         END IF;
-        IF pixel_row_1 <= ball_1_y THEN -- vy_1 = |ball_1_y - pixel_row_1|
-            vy_1 := ball_1_y - pixel_row_1;
+        IF pixel_row <= ball_1_y THEN -- vy_1 = |ball_1_y - pixel_row|
+            vy_1 := ball_1_y - pixel_row;
         ELSE
-            vy_1 := pixel_row_1 - ball_1_y;
+            vy_1 := pixel_row - ball_1_y;
         END IF;
         IF ((vx_1 * vx_1) + (vy_1 * vy_1)) < (bsize * bsize) THEN -- test if radial distance < bsize
             ball_1_on <= game_on;
@@ -66,18 +66,18 @@ BEGIN
         END IF;
     END PROCESS;
 	
-    ball_2_draw : PROCESS (ball_2_x, ball_2_y, pixel_2_row, pixel_2_col) IS
+    ball_2_draw : PROCESS (ball_2_x, ball_2_y, pixel_row, pixel_col) IS
         VARIABLE vx_2, vy_2 : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
     BEGIN
-        IF pixel_col_2 <= ball_2_x THEN -- vx_2 = |ball_2_x - pixel_2_col|
+        IF pixel_col <= ball_2_x THEN -- vx_2 = |ball_2_x - pixel_col|
             vx_2 := ball_x - pixel_col;
         ELSE
-            vx_2 := pixel_col_2 - ball_2_x;
+            vx_2 := pixel_col - ball_2_x;
         END IF;
-        IF pixel_row_2 <= ball_2_y THEN -- vy_2 = |ball_2_y - pixel_row_2|
-            vy_2 := ball_2_y - pixel_row_2;
+        IF pixel_row <= ball_2_y THEN -- vy_2 = |ball_2_y - pixel_row|
+            vy_2 := ball_2_y - pixel_row;
         ELSE
-            vy_2 := pixel_row_2 - ball_2_y;
+            vy_2 := pixel_row - ball_2_y;
         END IF;
         IF ((vx_2 * vx_2) + (vy_2 * vy_2)) < (bsize * bsize) THEN -- test if radial distance < bsize
             ball_2_on <= game_on;
