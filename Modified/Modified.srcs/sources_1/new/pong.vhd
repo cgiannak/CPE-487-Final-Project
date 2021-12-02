@@ -24,7 +24,7 @@ ARCHITECTURE Behavioral OF pong IS
     SIGNAL S_red, S_green, S_blue : STD_LOGIC; --_VECTOR (3 DOWNTO 0);
     SIGNAL S_vsync : STD_LOGIC;
     SIGNAL S_pixel_row, S_pixel_col : STD_LOGIC_VECTOR (10 DOWNTO 0);
-    SIGNAL boatpos : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
+    SIGNAL batpos : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
     SIGNAL serial_clk, sample_clk : STD_LOGIC;
     SIGNAL adout : STD_LOGIC_VECTOR (11 DOWNTO 0);
     SIGNAL count : STD_LOGIC_VECTOR (9 DOWNTO 0); -- counter to generate ADC clocks
@@ -43,7 +43,7 @@ ARCHITECTURE Behavioral OF pong IS
             v_sync : IN STD_LOGIC;
             pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-            boat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+            bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
             serve : IN STD_LOGIC;
             red : OUT STD_LOGIC;
             green : OUT STD_LOGIC;
@@ -84,7 +84,7 @@ BEGIN
     ADC_CS <= sample_clk;
     -- Multiplies ADC output (0-4095) by 5/32 to give bat position (0-640)
     --batpos <= ('0' & adout(11 DOWNTO 3)) + adout(11 DOWNTO 5);
-    boatpos <= ("00" & adout(11 DOWNTO 3)) + adout(11 DOWNTO 4);
+    batpos <= ("00" & adout(11 DOWNTO 3)) + adout(11 DOWNTO 4);
     -- 512 + 256 = 768
     adc : adc_if
     PORT MAP(-- instantiate ADC serial to parallel interface
@@ -95,12 +95,12 @@ BEGIN
         data_1 => OPEN, 
         data_2 => adout 
     );
-    add_bb : boat_n_mines
+    add_bb : bat_n_ball
     PORT MAP(--instantiate bat and ball component
         v_sync => S_vsync, 
         pixel_row => S_pixel_row, 
         pixel_col => S_pixel_col, 
-        boat_x => boatpos, 
+        bat_x => batpos, 
         serve => btn0, 
         red => S_red, 
         green => S_green, 
