@@ -70,7 +70,7 @@ BEGIN
         VARIABLE vx_2, vy_2 : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
     BEGIN
         IF pixel_col <= ball_2_x THEN -- vx_2 = |ball_2_x - pixel_col|
-            vx_2 := ball_x - pixel_col;
+            vx_2 := ball_2_x - pixel_col;
         ELSE
             vx_2 := pixel_col - ball_2_x;
         END IF;
