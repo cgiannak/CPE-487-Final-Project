@@ -16,6 +16,9 @@ ENTITY bat_n_ball IS
     );
 END bat_n_ball;
 
+
+
+
 ARCHITECTURE Behavioral OF bat_n_ball IS
     CONSTANT bsize : INTEGER := 8; -- ball size in pixels
     CONSTANT bat_w : INTEGER := 20; -- bat width in pixels
@@ -32,6 +35,28 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
     CONSTANT bat_y : STD_LOGIC_VECTOR(10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(500, 11);
     -- current ball motion - initialized to (+ ball_speed) pixels/frame in both X and Y directions
     SIGNAL ball_x_motion, ball_y_motion : STD_LOGIC_VECTOR(10 DOWNTO 0) := ball_speed;
+	
+	
+	
+	CONSTANT bsize_1 : INTEGER := 8; -- ball size in pixels
+    CONSTANT bat_w_1 : INTEGER := 20; -- bat width in pixels
+    CONSTANT bat_h_1 : INTEGER := 3; -- bat height in pixels
+    -- distance ball moves each frame
+    CONSTANT ball_speed_1 : STD_LOGIC_VECTOR (10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR (6, 11);
+    SIGNAL ball_on_1 : STD_LOGIC; -- indicates whether ball is at current pixel position
+    SIGNAL bat_on_1 : STD_LOGIC; -- indicates whether bat at over current pixel position
+    SIGNAL game_on_1 : STD_LOGIC := '0'; -- indicates whether ball is in play
+    -- current ball position - intitialized to center of screen
+    SIGNAL ball_x_1 : STD_LOGIC_VECTOR(10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(300, 11);
+    SIGNAL ball_y_1 : STD_LOGIC_VECTOR(10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(400, 11);
+    -- bat vertical position
+    CONSTANT bat_y_1 : STD_LOGIC_VECTOR(10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(500, 11);
+    -- current ball motion - initialized to (+ ball_speed) pixels/frame in both X and Y directions
+    SIGNAL ball_x_motion_1, ball_y_motion_1 : STD_LOGIC_VECTOR(10 DOWNTO 0) := ball_speed_1;
+	
+	
+	
+	
 BEGIN
     red <= NOT bat_on; -- color setup for red ball and cyan bat on white background
     green <= NOT ball_on;
@@ -55,8 +80,37 @@ BEGIN
             ball_on <= game_on;
         ELSE
             ball_on <= '0';
+		END IF;
+END PROCESS;
+
+
+
+
+
+
+    balldraw_1 : PROCESS (ball_x_1, ball_y_1, pixel_row, pixel_col) IS
+        VARIABLE vx_1, vy_1 : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
+    BEGIN
+        IF pixel_col <= ball_x_1 THEN -- vx = |ball_x - pixel_col|
+            vx_1 := ball_x_1 - pixel_col;
+        ELSE
+            vx_1 := pixel_col - ball_x_1;
         END IF;
-    END PROCESS;
+        IF pixel_row <= ball_y_1 THEN -- vy = |ball_y - pixel_row|
+            vy_1 := ball_y_1 - pixel_row;
+        ELSE
+            vy_1 := pixel_row - ball_y_1;
+        END IF;
+        IF ((vx_1 * vx_1) + (vy_1 * vy_1)) < (bsize_1 * bsize_1) THEN -- test if radial distance < bsize
+            ball_on_1 <= game_on_1;
+        ELSE
+            ball_on_1 <= '0';
+        END IF;
+END PROCESS;
+
+
+
+
     -- process to draw bat
     -- set bat_on if current pixel address is covered by bat position
     batdraw : PROCESS (bat_x, pixel_row, pixel_col) IS
@@ -71,8 +125,61 @@ BEGIN
             bat_on <= '0';
         END IF;
     END PROCESS;
+	
+	
+	
+	
     -- process to move ball once every frame (i.e., once every vsync pulse)
-    mball : PROCESS
+    mball_1 : PROCESS
+        VARIABLE temp_1 : STD_LOGIC_VECTOR (11 DOWNTO 0);
+    BEGIN
+        WAIT UNTIL rising_edge(v_sync);
+        IF serve = '1' AND game_on = '0' THEN -- test for new serve
+            game_on <= '1';
+            ball_y_motion_1 <= (NOT ball_speed_1) + 1; -- set vspeed to (- ball_speed) pixels
+        ELSIF ball_y_1 <= bsize_1 THEN -- bounce off top wall
+            ball_y_motion_1 <= ball_speed_1; -- set vspeed to (+ ball_speed) pixels
+        ELSIF ball_y_1 + bsize_1 >= 600 THEN -- if ball meets bottom wall
+            ball_y_motion_1 <= (NOT ball_speed_1) + 1; -- set vspeed to (- ball_speed) pixels
+            game_on_1 <= '0'; -- and make ball disappear
+        END IF;
+        -- allow for bounce off left or right of screen
+        IF ball_x_1 + bsize_1 >= 800 THEN -- bounce off right wall
+            ball_x_motion_1 <= (NOT ball_speed_1) + 1; -- set hspeed to (- ball_speed) pixels
+        ELSIF ball_x_1 <= bsize_1 THEN -- bounce off left wall
+            ball_x_motion_1 <= ball_speed_1; -- set hspeed to (+ ball_speed) pixels
+        END IF;
+        -- allow for bounce off bat
+        IF (ball_x_1 + bsize_1/2) >= (bat_x - bat_w_1) AND
+         (ball_x_1 - bsize_1/2) <= (bat_x + bat_w_1) AND
+             (ball_y_1 + bsize_1/2) >= (bat_y_1 - bat_h_1) AND
+             (ball_y_1 - bsize_1/2) <= (bat_y_1 + bat_h_1) THEN
+                ball_y_motion_1 <= (NOT ball_speed_1) + 1; -- set vspeed to (- ball_speed) pixels
+        END IF;
+        -- compute next ball vertical position
+        -- variable temp adds one more bit to calculation to fix unsigned underflow problems
+        -- when ball_y is close to zero and ball_y_motion is negative
+        temp_1 := ('0' & ball_y_1) + (ball_y_motion_1(10) & ball_y_motion_1);
+        IF game_on = '0' THEN
+            ball_y_1 <= CONV_STD_LOGIC_VECTOR(440, 11);
+        ELSIF temp_1(11) = '1' THEN
+            ball_y_1 <= (OTHERS => '0');
+        ELSE ball_y_1 <= temp_1(10 DOWNTO 0); -- 9 downto 0
+        END IF;
+        -- compute next ball horizontal position
+        -- variable temp adds one more bit to calculation to fix unsigned underflow problems
+        -- when ball_x is close to zero and ball_x_motion is negative
+        temp_1 := ('0' & ball_x_1) + (ball_x_motion_1(10) & ball_x_motion_1);
+        IF temp_1(11) = '1' THEN
+            ball_x_1 <= (OTHERS => '0');
+        ELSE ball_x_1 <= temp_1(10 DOWNTO 0);
+        END IF;
+    END PROCESS;
+	
+	
+	
+	
+	mball : PROCESS
         VARIABLE temp : STD_LOGIC_VECTOR (11 DOWNTO 0);
     BEGIN
         WAIT UNTIL rising_edge(v_sync);
@@ -117,4 +224,8 @@ BEGIN
         ELSE ball_x <= temp(10 DOWNTO 0);
         END IF;
     END PROCESS;
+	
+	
+	
+	
 END Behavioral;

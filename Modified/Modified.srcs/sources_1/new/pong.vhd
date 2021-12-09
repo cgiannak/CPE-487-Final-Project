@@ -28,6 +28,18 @@ ARCHITECTURE Behavioral OF pong IS
     SIGNAL serial_clk, sample_clk : STD_LOGIC;
     SIGNAL adout : STD_LOGIC_VECTOR (11 DOWNTO 0);
     SIGNAL count : STD_LOGIC_VECTOR (9 DOWNTO 0); -- counter to generate ADC clocks
+	
+	
+	SIGNAL pxl_clk_1 : STD_LOGIC := '0'; -- 25 MHz clock to VGA sync module
+    -- internal signals to connect modules
+    SIGNAL S_red_1, S_green_1, S_blue_1 : STD_LOGIC; --_VECTOR (3 DOWNTO 0);
+    SIGNAL S_vsync_1 : STD_LOGIC;
+    SIGNAL S_pixel_row_1, S_pixel_col_1 : STD_LOGIC_VECTOR (10 DOWNTO 0);
+    SIGNAL batpos_1 : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
+    SIGNAL serial_clk_1, sample_clk_1 : STD_LOGIC;
+    SIGNAL adout_1 : STD_LOGIC_VECTOR (11 DOWNTO 0);
+    SIGNAL count_1 : STD_LOGIC_VECTOR (9 DOWNTO 0); -- counter to generate ADC clocks
+	
     COMPONENT adc_if IS
         PORT (
             SCK : IN STD_LOGIC;
@@ -38,6 +50,8 @@ ARCHITECTURE Behavioral OF pong IS
             data_2 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
         );
     END COMPONENT;
+	
+	
     COMPONENT bat_n_ball IS
         PORT (
             v_sync : IN STD_LOGIC;
@@ -50,6 +64,8 @@ ARCHITECTURE Behavioral OF pong IS
             blue : OUT STD_LOGIC
         );
     END COMPONENT;
+	
+	
     COMPONENT vga_sync IS
         PORT (
             pixel_clk : IN STD_LOGIC;
@@ -95,6 +111,8 @@ BEGIN
         data_1 => OPEN, 
         data_2 => adout 
     );
+	
+	
     add_bb : bat_n_ball
     PORT MAP(--instantiate bat and ball component
         v_sync => S_vsync, 
@@ -106,6 +124,21 @@ BEGIN
         green => S_green, 
         blue => S_blue
     );
+	
+	
+	add_bb_1 : bat_n_ball
+    PORT MAP(--instantiate bat and ball component
+        v_sync => S_vsync_1, 
+        pixel_row => S_pixel_row_1, 
+        pixel_col => S_pixel_col_1, 
+        bat_x => batpos_1, 
+        serve => btn0_1, 
+        red => S_red_1, 
+        green => S_green_1, 
+        blue => S_blue_1
+    );
+	
+
     vga_driver : vga_sync
     PORT MAP(--instantiate vga_sync component
         pixel_clk => pxl_clk, 
