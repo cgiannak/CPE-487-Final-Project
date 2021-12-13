@@ -39,5 +39,8 @@ Our original plan was to duplicate the sprites from the lab 6 code by creating m
 ### Implementation
 We made progress with this plan and got multiple balls from the modified lab 6 pong code instantiated, but only one was visible due to overlapping sprites or not creating the second instance properly upon the "start" button being pressed. We also had some issues with the second ball instance where VGA pins were getting mapped to multiple times and thus passing the "Synthesis" stage, but creating critical errors in the "Implementation" stage.
 
+# Conclusions
+
+
 # To Run Our Project: 
 Open the "Modified" folder as a project in Xilinx Vivado and run synthesis, open implementation, generate bitstream, connect to the Nexys-A7 FPGA, and upload the generated code to the board.
