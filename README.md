@@ -4,7 +4,16 @@
 At first, our project was intended to be an image reader and edge detector. We both had taken the course "CPE-462" and learned about image processing and matrix convolutions to detect edges on an image. 
 
 ### Plan
-We found some existing verilog code online and we thought we could just implement convolution algorithms using math and logic while implementing the image read using a library. 
+We found some existing verilog code online and we thought we could just implement convolution algorithms using math and logic while implementing the image read using a library.
+
+We did research using the following resources and tried to implement them to no avail as they were code snippets and we had a lot of trouble extrapolating them to an entire project:
+
+[FPGA Image Processing](https://medium.com/accelerated-image-processing-using-fpgas/image-processing-using-fpgas-8c703ef45808)
+[Verilog Image Processing](https://www.fpga4student.com/2016/11/image-processing-on-fpga-verilog.html)
+[VHDL Image Processing](https://www.fpga4student.com/2018/08/how-to-read-image-in-vhdl.html)
+[Matrix Multiplication in VHDL](https://www.fpga4student.com/2016/11/matrix-multiplier-core-design.html)
+[Binary Image Converter](https://www.dcode.fr/binary-image)
+
 
 ### Implementation
 Unfortunately, not only was the actual edge detection algorithm very challenging to implement, we had a lot of trouble just trying to get the FPGA to read in an image properly. We had to use a third-party library and it would not work. We had to convert jpeg images into .mif ASCII text files and still couldn't get the image read functionality to work. We decided that this project was a bit too advanced for our skillset and available time to work on the project
