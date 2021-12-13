@@ -43,7 +43,7 @@ We made progress with this plan and got multiple balls from the modified lab 6 p
 - Making a sprite-oriented video game in VHDL is very challenging because each entity requires the same code with different values, causing the code length to greatly increase
 - Modifying a base project is more effective than making a project from scratch since you save time by avoiding initialization and trying to get something to run
 - VHDL entities with complex behavioral specifications make up an effective hardware design
-- Although it can be done, making a sprite-oriented video game for an FPGA in VHDL may create issues for expansion beyond a simple demo due to the nature of VHDL. Something low-level written in VHDL to serve as a base may be a better approach since you can build upon that in more high-level layers
+- Although it can be done, making a sprite-oriented video game for an FPGA in VHDL may create issues for expansion beyond a simple demo due to the nature of HDL. Something low-level written in HDL to serve as a base may be a better approach since you can build upon that in more high-level layers
 
 # To Run Our Project: 
 Open the "Modified" folder as a project in Xilinx Vivado and run synthesis, open implementation, generate bitstream, connect to the Nexys-A7 FPGA, and upload the generated code to the board.
