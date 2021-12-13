@@ -8,11 +8,11 @@ We found some existing verilog code online and we thought we could just implemen
 
 We did research using the following resources and tried to implement them to no avail as they were code snippets and we had a lot of trouble extrapolating them to an entire project:
 
-[FPGA Image Processing](https://medium.com/accelerated-image-processing-using-fpgas/image-processing-using-fpgas-8c703ef45808)
-[Verilog Image Processing](https://www.fpga4student.com/2016/11/image-processing-on-fpga-verilog.html)
-[VHDL Image Processing](https://www.fpga4student.com/2018/08/how-to-read-image-in-vhdl.html)
-[Matrix Multiplication in VHDL](https://www.fpga4student.com/2016/11/matrix-multiplier-core-design.html)
-[Binary Image Converter](https://www.dcode.fr/binary-image)
+[FPGA Image Processing](https://medium.com/accelerated-image-processing-using-fpgas/image-processing-using-fpgas-8c703ef45808)  
+[Verilog Image Processing](https://www.fpga4student.com/2016/11/image-processing-on-fpga-verilog.html)  
+[VHDL Image Processing](https://www.fpga4student.com/2018/08/how-to-read-image-in-vhdl.html)  
+[Matrix Multiplication in VHDL](https://www.fpga4student.com/2016/11/matrix-multiplier-core-design.html)  
+[Binary Image Converter](https://www.dcode.fr/binary-image)  
 
 
 ### Implementation
