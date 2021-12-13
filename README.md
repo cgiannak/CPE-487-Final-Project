@@ -21,6 +21,10 @@ Unfortunately, not only was the actual edge detection algorithm very challenging
 ## Depth Charge
 Our next idea was to create a version of the Depthcharge game from 1977. Depthcharge was a game in which a ship at the top of the screen moved horizontally, and tossed down depth charges at submarines that earned more points the farther down the submarines were.
 
+[Depthcharge](https://en.wikipedia.org/wiki/Depthcharge)
+
+![Depthcharge](https://github.com/[mjworski22]/[CPE-487-Final-Project]/blob/[main]/depthch_screenshot.png?raw=true)
+
 ### Plan
 Our version was going to have a few minor differences. First of all, the depth charges would be released directly under the boat, rather than to the sides. Secondly, there would be mines that randomly floated up from the bottom of the screen that would trigger a game over if they collided with the player boat. Finally, the score would be shown on the seven segment display on the FPGA board rather than the screen itself. 
 
